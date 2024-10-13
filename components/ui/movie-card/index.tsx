@@ -1,6 +1,7 @@
 import StarIcon from "@/assets/icons/star.png";
 import { Colors } from "@/constants/Colors";
 import { MovieCardProps } from "@/type/inderface";
+import { Link } from "expo-router";
 import React from "react";
 
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -12,22 +13,29 @@ const MovieCard: React.FC<MovieCardProps> = ({
   id,
 }) => {
   return (
-    <View style={styles.movieCard}>
-      <Image
-        source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
-        style={styles.movieImage}
-      />
-      <View style={styles.movieRating}>
-        <Text style={styles.rating}>
-          <Image source={StarIcon} style={styles.starIcon} />
-          {vote_average.toFixed(1)}
+    <Link
+      href={{
+        pathname: "/movie/[id]",
+        params: { id: id },
+      }}
+    >
+      <View style={styles.movieCard}>
+        <Image
+          source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
+          style={styles.movieImage}
+        />
+        <View style={styles.movieRating}>
+          <Text style={styles.rating}>
+            <Image source={StarIcon} style={styles.starIcon} />
+            {vote_average.toFixed(1)}
+          </Text>
+        </View>
+        <Text numberOfLines={1} style={styles.movieTitle}>
+          {title}
         </Text>
+        <Text style={styles.movieGenre}>Action</Text>
       </View>
-      <Text numberOfLines={1} style={styles.movieTitle}>
-        {title}
-      </Text>
-      <Text style={styles.movieGenre}>Action</Text>
-    </View>
+    </Link>
   );
 };
 

@@ -11,8 +11,16 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
   vote_average,
   poster_path,
 }) => {
+  console.log({ id });
+
   return (
-    <Link href={`/movie/${id}`} id={`/movie/${id}`} style={styles.container}>
+    <Link
+      href={{
+        pathname: "/movie/[id]",
+        params: { id: id },
+      }}
+      style={styles.container}
+    >
       <View style={styles.imageContainer}>
         <Image
           source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}

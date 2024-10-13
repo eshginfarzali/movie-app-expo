@@ -1,25 +1,18 @@
 import axiosClient from "@/services";
 
-export function getPopularMovies() {
-  return axiosClient.get("/3/movie/popular");
-}
+export const getPopularMovies = () => axiosClient.get("/3/movie/popular");
 
-export function getUpcomingMovies() {
-  return axiosClient.get("/3/movie/upcoming");
-}
+export const getUpcomingMovies = () => axiosClient.get("/3/movie/upcoming");
 
-export function getSearchMovies(search: string) {
-  return axiosClient.get(`/3/search/movie`, {
-    params: {
-      query: search,
-    },
+export const getSearchMovies = (search: string) =>
+  axiosClient.get(`/3/search/movie`, {
+    params: { query: search },
   });
-}
 
-export function getNowPlayingMovies() {
-  return axiosClient.get("/3/movie/now_playing");
-}
+export const getNowPlayingMovies = () =>
+  axiosClient.get("/3/movie/now_playing");
 
-export function getMovieById(id: string) {
-  return axiosClient.get(`/3/movie/${id}`);
-}
+export const getMovieById = (id: string) => axiosClient.get(`/3/movie/${id}`);
+
+export const getMovieCasts = (id: string) =>
+  axiosClient.get(`/3/movie/${id}/credits`);

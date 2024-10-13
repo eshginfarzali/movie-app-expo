@@ -23,7 +23,7 @@ const Search = () => {
   const fetchSearchResults = async (searchTerm: string) => {
     try {
       const response = await getSearchMovies(searchTerm);
-      setResults(response?.data?.results);
+      setResults(response?.data?.results ?? []);
     } catch (error) {
       Alert.alert("Error", "Failed to fetch search results.");
     }

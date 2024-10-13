@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 
@@ -9,12 +10,19 @@ const MovieBanner = ({
   id: number;
 }) => {
   return (
-    <View style={styles.container}>
-      <Image
-        source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
-        style={{ width: 269, height: 404 }}
-      />
-    </View>
+    <Link
+      href={{
+        pathname: "/movie/[id]",
+        params: { id: id },
+      }}
+    >
+      <View style={styles.container}>
+        <Image
+          source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
+          style={{ width: 269, height: 404 }}
+        />
+      </View>
+    </Link>
   );
 };
 

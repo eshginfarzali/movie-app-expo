@@ -1,6 +1,7 @@
 import Logo from "@/assets/icons/logo.png";
 import MovieBanner from "@/components/ui/movie-banner";
 import MovieCard from "@/components/ui/movie-card";
+import Title from "@/components/ui/title";
 import { Colors } from "@/constants/Colors";
 import {
   getNowPlayingMovies,
@@ -16,35 +17,40 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
 } from "react-native";
 
 export default function HomeScreen() {
-  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [popularMovies, setPopularMovies] = useState([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState<MovieCardProps[]>(
+    []
+  );
+  const [upcomingMovies, setUpcomingMovies] = useState<MovieCardProps[]>([]);
+  const [popularMovies, setPopularMovies] = useState<MovieCardProps[]>([]);
 
-  const fetcResults = async () => {
+  const fetchResults = async () => {
     try {
-      const responseNowPlaying = await getNowPlayingMovies();
-      const responseUpComing = await getUpcomingMovies();
-      const responsePopular = await getPopularMovies();
-      setNowPlayingMovies(responseNowPlaying?.data?.results);
-      setUpcomingMovies(responseUpComing?.data?.results);
-      setPopularMovies(responsePopular?.data?.results);
+      const [responseNowPlaying, responseUpcoming, responsePopular] =
+        await Promise.all([
+          getNowPlayingMovies(),
+          getUpcomingMovies(),
+          getPopularMovies(),
+        ]);
+      setNowPlayingMovies(responseNowPlaying?.data?.results ?? []);
+      setUpcomingMovies(responseUpcoming?.data?.results ?? []);
+      setPopularMovies(responsePopular?.data?.results ?? []);
     } catch (error) {
-      Alert.alert("Error", "Failed to fetch search results.");
+      Alert.alert("Error", "Failed to fetch movie data.");
     }
   };
 
   useEffect(() => {
-    fetcResults();
+    fetchResults();
   }, []);
 
-  const renderNowPlayingCard = ({ item }: { item: any }) => (
+  const renderMovieBanner = ({ item }: { item: any }) => (
     <MovieBanner poster_path={item.poster_path} id={item.id} />
   );
-  const renderPopularUpcomingCard = ({ item }: { item: MovieCardProps }) => (
+
+  const renderMovieCard = ({ item }: { item: MovieCardProps }) => (
     <MovieCard
       id={item.id}
       title={item.title}
@@ -54,31 +60,29 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: Colors.background, padding: 16 }}
-    >
+    <SafeAreaView style={styles.container}>
       <Image source={Logo} style={styles.logo} />
       <ScrollView>
         <FlatList
-          data={upcomingMovies}
-          renderItem={renderNowPlayingCard}
+          data={nowPlayingMovies}
+          renderItem={renderMovieBanner}
           keyExtractor={(item) => item.id.toString()}
           horizontal
           contentContainerStyle={styles.horizontalList}
         />
-        <Text style={styles.textTitle}>Popular Movies</Text>
+        <Title title="Popular Movies" />
         <FlatList
           data={popularMovies}
-          renderItem={renderPopularUpcomingCard}
+          renderItem={renderMovieCard}
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalList}
         />
-        <Text style={styles.textTitle}>Upcoming Movies</Text>
+        <Title title="Upcoming Movies" />
         <FlatList
           data={upcomingMovies}
-          renderItem={renderPopularUpcomingCard}
+          renderItem={renderMovieCard}
           keyExtractor={(item) => item.id.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -90,6 +94,11 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    padding: 16,
+  },
   logo: {
     width: 100,
     height: 30,
@@ -97,12 +106,5 @@ const styles = StyleSheet.create({
   },
   horizontalList: {
     paddingVertical: 10,
-  },
-  textTitle: {
-    color: Colors.text,
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 10,
   },
 });
