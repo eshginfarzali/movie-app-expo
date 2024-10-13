@@ -6,6 +6,17 @@ Here's a sample README file for your `movie-app-expo` project:
 
 This is a mobile application built using Expo and React Native. It allows users to browse and view movies. The app uses Expo Router for navigation, Axios for data fetching, and various other dependencies for smooth and responsive UI.
 
+# Screenshots
+
+Below are some screenshots from the app:
+
+<div align="center">
+  <img src="./readme-image/home.png" alt="Home Screen" width="200" style="margin-right: 10px;" />
+  <img src="./readme-image/home-1.png" alt="Home Screen Variant" width="200" style="margin-right: 10px;" />
+  <img src="./readme-image/search.png" alt="Search Screen" width="200" style="margin-right: 10px;" />
+  <img src="./readme-image/detail.png" alt="Detail Screen" width="200" />
+</div>
+
 ## Table of Contents
 
 - [Requirements](#requirements)
