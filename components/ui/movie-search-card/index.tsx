@@ -32,7 +32,6 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
           {title}
         </Text>
         <Text style={styles.genre}>Action</Text>
-
         <Rating vote_average={vote_average} style={styles.rating} />
       </View>
     </Link>

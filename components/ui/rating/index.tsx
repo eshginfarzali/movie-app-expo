@@ -1,7 +1,14 @@
 import StarIcon from "@/assets/icons/star.png";
 import { Colors } from "@/constants/Colors";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+} from "react-native";
 
 const Rating = ({
   vote_average,
