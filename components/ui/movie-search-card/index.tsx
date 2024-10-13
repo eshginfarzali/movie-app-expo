@@ -1,4 +1,4 @@
-import StarIcon from "@/assets/icons/star.png";
+import Rating from "@/components/ui/rating";
 import { Colors } from "@/constants/Colors";
 import { MovieCardProps } from "@/type/inderface";
 import { Link } from "expo-router";
@@ -32,10 +32,8 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
           {title}
         </Text>
         <Text style={styles.genre}>Action</Text>
-        <Text style={styles.rating}>
-          <Image source={StarIcon} style={styles.starIcon} />
-          {vote_average.toFixed(1)}
-        </Text>
+
+        <Rating vote_average={vote_average} style={styles.rating} />
       </View>
     </Link>
   );
@@ -47,7 +45,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flex: 1,
-    // padding: 10,
     borderRadius: 10,
     backgroundColor: Colors.card_background,
     marginBottom: 10,
@@ -76,7 +73,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingLeft: 10,
     color: Colors.text,
-    // justifyContent: "center",
     alignItems: "flex-start",
   },
   title: {
@@ -90,13 +86,5 @@ const styles = StyleSheet.create({
   },
   rating: {
     marginTop: 10,
-    fontSize: 16,
-    color: Colors.genre,
-  },
-
-  starIcon: {
-    width: 16,
-    height: 16,
-    marginRight: 5,
   },
 });

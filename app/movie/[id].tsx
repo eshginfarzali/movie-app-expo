@@ -1,4 +1,6 @@
 import ActorCard from "@/components/ui/actor-card";
+import Header from "@/components/ui/header";
+import Rating from "@/components/ui/rating";
 import Title from "@/components/ui/title";
 import { Colors } from "@/constants/Colors";
 import { getMovieById, getMovieCasts } from "@/services/movie";
@@ -10,6 +12,7 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -25,8 +28,8 @@ const MovieDetailScreen = () => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await getMovieById(id);
-        const castResponse = await getMovieCasts(id);
+        const response = await getMovieById(id as string);
+        const castResponse = await getMovieCasts(id as string);
 
         console.log({ castResponse });
         setCast(castResponse?.data?.cast ?? []);
@@ -52,28 +55,36 @@ const MovieDetailScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={{
-            uri: `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
-          }}
-          style={styles.poster}
+      <Header title={movieDetails?.title} />
+
+      <ScrollView>
+        <View>
+          <Image
+            source={{
+              uri: `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
+            }}
+            style={styles.poster}
+          />
+          <View style={styles.titleContainer}>
+            <Title style={styles.title} title={movieDetails?.title} />
+            <Rating vote_average={movieDetails?.vote_average} />
+          </View>
+        </View>
+        <View style={styles.details}>
+          <Title title="Overview" />
+          <Text style={styles.description}>{movieDetails?.overview}</Text>
+        </View>
+        <Title title="Cast" style={{ marginTop: 40 }} />
+        <FlatList
+          data={cast}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item?.id?.toString()}
+          renderItem={({ item }) => (
+            <ActorCard profile_path={item?.profile_path} name={item?.name} />
+          )}
         />
-        <Text style={styles.title}>{movieDetails.title}</Text>
-      </View>
-      <View style={styles.details}>
-        <Text style={styles.description}>{movieDetails.overview}</Text>
-      </View>
-      <Title title="Cast" />
-      <FlatList
-        data={cast}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <ActorCard profile_path={item.profile_path} name={item.name} />
-        )}
-      />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -86,15 +97,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     padding: 16,
   },
-  header: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
   poster: {
     width: "100%",
-    // flex: 1,
-    height: 233,
-    // borderRadius: 10,
+    height: 333,
+    resizeMode: "cover",
+  },
+  titleContainer: {
+    flexDirection: "row",
   },
   title: {
     fontSize: 24,

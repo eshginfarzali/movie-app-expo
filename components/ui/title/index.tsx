@@ -9,7 +9,11 @@ const Title = ({
   title: string;
   style?: StyleProp<TextStyle>;
 }) => {
-  return <Text style={[styles.textTitle, style]}>{title}</Text>;
+  return (
+    <Text numberOfLines={1} style={[styles.textTitle, style]}>
+      {title}
+    </Text>
+  );
 };
 
 export default Title;
