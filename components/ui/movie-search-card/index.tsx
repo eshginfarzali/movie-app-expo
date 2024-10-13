@@ -11,8 +11,6 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
   vote_average,
   poster_path,
 }) => {
-  console.log({ id });
-
   return (
     <Link
       href={{

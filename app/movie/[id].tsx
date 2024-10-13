@@ -20,7 +20,6 @@ import {
 
 const MovieDetailScreen = () => {
   const { id } = useLocalSearchParams();
-  console.log({ id });
 
   const [movieDetails, setMovieDetails] = useState<any>(null);
   const [cast, setCast] = useState<any>(null);
@@ -30,8 +29,6 @@ const MovieDetailScreen = () => {
       try {
         const response = await getMovieById(id as string);
         const castResponse = await getMovieCasts(id as string);
-
-        console.log({ castResponse });
         setCast(castResponse?.data?.cast ?? []);
 
         setMovieDetails(response?.data ?? {});
@@ -44,7 +41,6 @@ const MovieDetailScreen = () => {
       fetchMovieDetails();
     }
   }, [id]);
-  console.log(JSON.stringify(cast, null, 2));
   if (!movieDetails) {
     return (
       <SafeAreaView style={styles.container}>
