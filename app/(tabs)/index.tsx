@@ -9,15 +9,18 @@ import {
   getUpcomingMovies,
 } from "@/services/movie";
 import { MovieCardProps } from "@/type/inderface";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Animated,
   FlatList,
   Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  View,
 } from "react-native";
+import { ExpandingDot } from "react-native-animated-pagination-dots";
 
 export default function HomeScreen() {
   const [nowPlayingMovies, setNowPlayingMovies] = useState<MovieCardProps[]>(
@@ -25,6 +28,7 @@ export default function HomeScreen() {
   );
   const [upcomingMovies, setUpcomingMovies] = useState<MovieCardProps[]>([]);
   const [popularMovies, setPopularMovies] = useState<MovieCardProps[]>([]);
+  const scrollX = React.useRef(new Animated.Value(0)).current;
 
   const fetchResults = async () => {
     try {
@@ -63,14 +67,49 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <Image source={Logo} style={styles.logo} />
       <ScrollView>
-        <FlatList
-          data={nowPlayingMovies}
-          renderItem={renderMovieBanner}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          contentContainerStyle={styles.horizontalList}
+        <View>
+          <FlatList
+            data={nowPlayingMovies}
+            renderItem={renderMovieBanner}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            contentContainerStyle={styles.horizontalList}
+            showsHorizontalScrollIndicator={false}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              {
+                useNativeDriver: false,
+              }
+            )}
+            pagingEnabled
+            decelerationRate={"normal"}
+            scrollEventThrottle={16}
+          />
+          <ExpandingDot
+            data={nowPlayingMovies}
+            expandingDotWidth={30}
+            scrollX={scrollX}
+            inActiveDotOpacity={0.6}
+            dotStyle={{
+              width: 10,
+              height: 10,
+              backgroundColor: Colors.purple,
+              borderColor: Colors.purple,
+              borderRadius: 5,
+              marginHorizontal: 5,
+            }}
+            containerStyle={{
+              top: 420,
+              marginBottom: 10,
+            }}
+          />
+        </View>
+        <Title
+          title="Popular Movies"
+          style={{
+            marginTop: 20,
+          }}
         />
-        <Title title="Popular Movies" />
         <FlatList
           data={popularMovies}
           renderItem={renderMovieCard}

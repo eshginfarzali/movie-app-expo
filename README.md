@@ -1,50 +1,122 @@
-# Welcome to your Expo app 👋
+Here's a sample README file for your `movie-app-expo` project:
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+---
 
-## Get started
+# Movie App (Expo)
 
-1. Install dependencies
+This is a mobile application built using Expo and React Native. It allows users to browse and view movies. The app uses Expo Router for navigation, Axios for data fetching, and various other dependencies for smooth and responsive UI.
 
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Running the App](#running-the-app)
+- [Scripts](#scripts)
+- [Testing](#testing)
+- [Linting](#linting)
+- [Resetting the Project](#resetting-the-project)
+- [Folder Structure](#folder-structure)
+
+## Requirements
+
+Make sure you have the following installed before proceeding:
+
+- Node.js (>= 14.x.x)
+- Expo CLI (`npm install -g expo-cli`)
+- Android Studio and/or Xcode for mobile development (optional)
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/movie-app-expo.git
+   cd movie-app-expo
+   ```
+
+2. Install the dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
+## Running the App
 
-   ```bash
-    npx expo start
-   ```
+### On Android:
 
-In the output, you'll find options to open the app in a
+```bash
+npm run android
+```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### On iOS:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+```bash
+npm run ios
+```
 
-## Get a fresh project
+### On Web:
 
-When you're ready, run:
+```bash
+npm run web
+```
+
+This will launch the Expo development environment in your browser, and the app will run on the desired platform.
+
+## Scripts
+
+- `npm start`: Starts the Expo development server.
+- `npm run android`: Runs the app on an Android emulator or connected device.
+- `npm run ios`: Runs the app on an iOS simulator or connected device.
+- `npm run web`: Runs the app in the browser.
+- `npm run reset-project`: Resets the project by clearing caches and node_modules (custom script located in `scripts/reset-project.js`).
+- `npm test`: Runs the Jest tests in watch mode.
+- `npm run lint`: Runs ESLint for code linting.
+
+## Testing
+
+This project uses **Jest** for unit testing. To run the tests, use:
+
+```bash
+npm test
+```
+
+You can also run them in watch mode with the same command.
+
+## Linting
+
+To run the linter:
+
+```bash
+npm run lint
+```
+
+This will check your code for style issues and potential errors.
+
+## Resetting the Project
+
+If you encounter issues with the project, you can reset it using the following script:
 
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This will clear the cache, reinstall dependencies, and ensure a clean state.
 
-## Learn more
+## Folder Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+movie-app-expo/
+├── app                     # root
+├── assets/                 # Images, fonts, and other static assets
+├── components/             # Reusable React Native components
+├── services/               # Axios services for API calls
+├── scripts/                # Utility scripts (like reset-project)
+├── type                    # Type
+├── type                    # Type
+├── hooks                   # Hooks
+├── package.json            # Project configurations and scripts
+└── tsconfig.json           # TypeScript configuration
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This README provides clear instructions for setup, running the app, testing, and linting. You can customize it further if necessary!
