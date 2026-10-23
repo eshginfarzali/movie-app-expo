@@ -5,10 +5,14 @@ import React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 
 const Header = ({ title }: { title: string }) => {
-  const navgiton = useNavigation();
+  const navigation = useNavigation();
   return (
-    <View style={styles.backConatiner}>
-      <Pressable onPress={navgiton.goBack}>
+    <View style={styles.backContainer}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
+        onPress={navigation.goBack}
+      >
         <Image source={BackIcon} style={styles.backIcon} />
       </Pressable>
       <Title title={title} style={styles.backText} />
@@ -19,7 +23,7 @@ const Header = ({ title }: { title: string }) => {
 export default Header;
 
 const styles = StyleSheet.create({
-  backConatiner: {
+  backContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
