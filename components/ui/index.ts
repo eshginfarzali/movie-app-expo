@@ -1,4 +1,9 @@
-export * from "./actor-card";
-export * from "./movie-banner";
-export * from "./movie-card";
-export * from "./movie-search-card";
+export { default as ActorCard } from "./actor-card";
+export { default as ErrorState } from "./error-state";
+export { default as Header } from "./header";
+export { default as MovieBanner } from "./movie-banner";
+export { default as MovieCard } from "./movie-card";
+export { default as MovieSearchCard } from "./movie-search-card";
+export { default as Rating } from "./rating";
+export { default as SearchInput } from "./search-input";
+export { default as Title } from "./title";

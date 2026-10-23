@@ -1,16 +1,25 @@
 import Rating from "@/components/ui/rating";
 import { Colors } from "@/constants/Colors";
-import { MovieCardProps } from "@/type/inderface";
+import { getImageUrl } from "@/services/image";
 import { Link } from "expo-router";
 import React from "react";
 
 import { Image, StyleSheet, Text, View } from "react-native";
+
+export interface MovieCardProps {
+  id: number;
+  title: string;
+  vote_average: number;
+  poster_path?: string | null;
+  genre?: string;
+}
 
 const MovieCard: React.FC<MovieCardProps> = ({
   poster_path,
   vote_average,
   title,
   id,
+  genre,
 }) => {
   return (
     <Link
@@ -21,14 +30,14 @@ const MovieCard: React.FC<MovieCardProps> = ({
     >
       <View style={styles.movieCard}>
         <Image
-          source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
+          source={{ uri: getImageUrl(poster_path, "w342") }}
           style={styles.movieImage}
         />
         <Rating vote_average={vote_average} style={styles.movieRating} />
         <Text numberOfLines={1} style={styles.movieTitle}>
           {title}
         </Text>
-        <Text style={styles.movieGenre}>Action</Text>
+        {genre ? <Text style={styles.movieGenre}>{genre}</Text> : null}
       </View>
     </Link>
   );

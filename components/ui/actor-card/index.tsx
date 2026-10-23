@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { getImageUrl } from "@/services/image";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -6,13 +7,13 @@ const ActorCard = ({
   profile_path,
   name,
 }: {
-  profile_path: string;
+  profile_path: string | null;
   name: string;
 }) => {
   return (
     <View style={styles.actorCard}>
       <Image
-        source={{ uri: "https://image.tmdb.org/t/p/w500/" + profile_path }}
+        source={{ uri: getImageUrl(profile_path, "w185") }}
         style={styles.actorImage}
       />
       <Text numberOfLines={1} style={styles.actorName}>

@@ -1,47 +1,31 @@
 import ActorCard from "@/components/ui/actor-card";
+import ErrorState from "@/components/ui/error-state";
 import Header from "@/components/ui/header";
 import Rating from "@/components/ui/rating";
 import Title from "@/components/ui/title";
 import { Colors } from "@/constants/Colors";
-import { getMovieById, getMovieCasts } from "@/services/movie";
+import { useMovieCredits, useMovieDetails } from "@/hooks/queries/movies";
+import { getErrorMessage } from "@/services/errors";
+import { getImageUrl } from "@/services/image";
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MovieDetailScreen = () => {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const details = useMovieDetails(id);
+  const credits = useMovieCredits(id);
 
-  const [movieDetails, setMovieDetails] = useState<any>(null);
-  const [cast, setCast] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        const response = await getMovieById(id as string);
-        const castResponse = await getMovieCasts(id as string);
-        setCast(castResponse?.data?.cast ?? []);
-
-        setMovieDetails(response?.data ?? {});
-      } catch (error) {
-        Alert.alert("Error", "Failed to fetch search results.");
-      }
-    };
-
-    if (id) {
-      fetchMovieDetails();
-    }
-  }, [id]);
-  if (!movieDetails) {
+  if (details.isPending) {
     return (
       <SafeAreaView style={styles.container}>
         <ActivityIndicator size="small" color={Colors.secendaryText} />
@@ -49,37 +33,61 @@ const MovieDetailScreen = () => {
     );
   }
 
+  if (details.isError) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Header title="" />
+        <ErrorState
+          message={getErrorMessage(details.error)}
+          onRetry={details.refetch}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  const movie = details.data;
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={movieDetails?.title} />
+      <Header title={movie.title} />
 
       <ScrollView>
         <View>
           <Image
-            source={{
-              uri: `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
-            }}
+            source={{ uri: getImageUrl(movie.poster_path) }}
             style={styles.poster}
           />
           <View style={styles.titleContainer}>
-            <Title style={styles.title} title={movieDetails?.title} />
-            <Rating vote_average={movieDetails?.vote_average} />
+            <Title style={styles.title} title={movie.title} />
+            <Rating vote_average={movie.vote_average} />
           </View>
+          {movie.genres.length > 0 ? (
+            <Text style={styles.genres}>
+              {movie.genres.map((genre) => genre.name).join(" · ")}
+            </Text>
+          ) : null}
         </View>
         <View style={styles.details}>
           <Title title="Overview" />
-          <Text style={styles.description}>{movieDetails?.overview}</Text>
+          <Text style={styles.description}>{movie.overview}</Text>
         </View>
-        <Title title="Cast" style={{ marginTop: 40 }} />
-        <FlatList
-          data={cast}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item?.id?.toString()}
-          renderItem={({ item }) => (
-            <ActorCard profile_path={item?.profile_path} name={item?.name} />
-          )}
-        />
+        <Title title="Cast" style={styles.castTitle} />
+        {credits.isError ? (
+          <ErrorState
+            message={getErrorMessage(credits.error)}
+            onRetry={credits.refetch}
+          />
+        ) : (
+          <FlatList
+            data={credits.data ?? []}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <ActorCard profile_path={item.profile_path} name={item.name} />
+            )}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -102,10 +110,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   title: {
+    flexShrink: 1,
     fontSize: 24,
     fontWeight: "bold",
     color: Colors.text,
     marginTop: 10,
+  },
+  genres: {
+    color: Colors.genre,
+    fontSize: 14,
   },
   details: {
     flex: 1,
@@ -113,5 +126,8 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     color: Colors.secendaryText,
+  },
+  castTitle: {
+    marginTop: 40,
   },
 });

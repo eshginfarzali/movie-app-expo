@@ -1,3 +1,4 @@
+import { getImageUrl } from "@/services/image";
 import { Link } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, View } from "react-native";
@@ -6,7 +7,7 @@ const MovieBanner = ({
   poster_path,
   id,
 }: {
-  poster_path: string;
+  poster_path: string | null;
   id: number;
 }) => {
   return (
@@ -18,7 +19,7 @@ const MovieBanner = ({
     >
       <View style={styles.container}>
         <Image
-          source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
+          source={{ uri: getImageUrl(poster_path) }}
           style={{ width: 269, height: 404 }}
         />
       </View>

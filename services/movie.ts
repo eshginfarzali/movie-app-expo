@@ -1,18 +1,33 @@
 import axiosClient from "@/services";
+import type {
+  GenreListResponse,
+  Movie,
+  MovieCredits,
+  MovieDetails,
+  PaginatedResponse,
+} from "@/services/types";
 
-export const getPopularMovies = () => axiosClient.get("/3/movie/popular");
+const get = async <T>(url: string, params?: Record<string, unknown>) => {
+  const { data } = await axiosClient.get<T>(url, { params });
+  return data;
+};
 
-export const getUpcomingMovies = () => axiosClient.get("/3/movie/upcoming");
+export const getPopularMovies = () =>
+  get<PaginatedResponse<Movie>>("/movie/popular");
 
-export const getSearchMovies = (search: string) =>
-  axiosClient.get(`/3/search/movie`, {
-    params: { query: search },
-  });
+export const getUpcomingMovies = () =>
+  get<PaginatedResponse<Movie>>("/movie/upcoming");
 
 export const getNowPlayingMovies = () =>
-  axiosClient.get("/3/movie/now_playing");
+  get<PaginatedResponse<Movie>>("/movie/now_playing");
 
-export const getMovieById = (id: string) => axiosClient.get(`/3/movie/${id}`);
+export const getSearchMovies = (query: string) =>
+  get<PaginatedResponse<Movie>>("/search/movie", { query });
+
+export const getMovieById = (id: string) =>
+  get<MovieDetails>(`/movie/${encodeURIComponent(id)}`);
 
 export const getMovieCasts = (id: string) =>
-  axiosClient.get(`/3/movie/${id}/credits`);
+  get<MovieCredits>(`/movie/${encodeURIComponent(id)}/credits`);
+
+export const getMovieGenres = () => get<GenreListResponse>("/genre/movie/list");

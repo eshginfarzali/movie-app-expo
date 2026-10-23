@@ -1,6 +1,7 @@
+import type { MovieCardProps } from "@/components/ui/movie-card";
 import Rating from "@/components/ui/rating";
 import { Colors } from "@/constants/Colors";
-import { MovieCardProps } from "@/type/inderface";
+import { getImageUrl } from "@/services/image";
 import { Link } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -10,6 +11,7 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
   title,
   vote_average,
   poster_path,
+  genre,
 }) => {
   return (
     <Link
@@ -21,7 +23,7 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
     >
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: "https://image.tmdb.org/t/p/w500/" + poster_path }}
+          source={{ uri: getImageUrl(poster_path, "w185") }}
           style={styles.image}
         />
       </View>
@@ -29,7 +31,7 @@ const MovieSearchCard: React.FC<MovieCardProps> = ({
         <Text numberOfLines={1} style={styles.title}>
           {title}
         </Text>
-        <Text style={styles.genre}>Action</Text>
+        {genre ? <Text style={styles.genre}>{genre}</Text> : null}
         <Rating vote_average={vote_average} style={styles.rating} />
       </View>
     </Link>
@@ -42,7 +44,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     flex: 1,
-    borderRadius: 10,
     backgroundColor: Colors.card_background,
     marginBottom: 10,
     shadowColor: "#000",
@@ -69,7 +70,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 10,
     paddingLeft: 10,
-    color: Colors.text,
     alignItems: "flex-start",
   },
   title: {
